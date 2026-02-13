@@ -1,4 +1,3 @@
-# Elevvo Pathways Internship 
 <div align="center">
   <img src="assets/Logo.png" alt="Demo Image">
 </div>
