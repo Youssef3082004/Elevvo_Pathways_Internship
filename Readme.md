@@ -1,6 +1,12 @@
-
 # Elevvo Pathways Internship 
-![Demo Image](assets/Logo.png)
+<div align="center">
+  <img src="assets/Logo.png" alt="Demo Image">
+</div>
+
+<br>
+
+<div align="center">
+</div>
 
 
 ## 📌 Repository Overview
