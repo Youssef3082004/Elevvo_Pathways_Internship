@@ -12,7 +12,7 @@
 </div>
 
 ## 📑 Description
-This project is part of the **Elevvo Pathways Internship (Task 1)**. It focuses on building a Machine Learning model to classify Amazon product reviews as either **Positive (1)** or **Negative (0)** using Natural Language Processing (NLP) techniques.
+This project is part of the **Elevvo Pathways Internship (Task 1)**. It focuses on building a Machine Learning model to classify [**`Amazon product reviews`**](https://www.kaggle.com/datasets/mahmudulhaqueshawon/amazon-product-reviews) as either **Positive (1)** or **Negative (0)** using Natural Language Processing (NLP) techniques.
 
 ## 📂 Project Structure
 
@@ -44,7 +44,6 @@ The text data undergoes a rigorous cleaning pipeline to ensure high-quality inpu
 The project implements and compares multiple algorithms:
 - **Logistic Regression**: A robust baseline for binary classification.
 - **Naive Bayes (MultinomialNB)**: Suitable for high-dimensional text data.
-- 
 
 ## 🧩 Helper Class (`Column.py`)
 
