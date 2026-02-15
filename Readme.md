@@ -1,4 +1,5 @@
-# Amazon Product Review Sentiment Analysis
+# News Aggregator Classification Model
+
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.13+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
@@ -8,11 +9,24 @@
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-3.9+-11557C?style=for-the-badge&logo=matplotlib&logoColor=white)](https://matplotlib.org)
 [![Seaborn](https://img.shields.io/badge/Seaborn-0.13+-4C72B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
 [![Seaborn](https://img.shields.io/badge/nltk-3.9.0+-472B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
-
 </div>
 
+
 ## 📑 Description
-This project is part of the **Elevvo Pathways Internship (Task 1)**. It focuses on building a Machine Learning model to classify [**`Amazon product reviews`**](https://www.kaggle.com/datasets/mahmudulhaqueshawon/amazon-product-reviews) as either **Positive (1)** or **Negative (0)** using Natural Language Processing (NLP) techniques.
+
+This project implements a machine learning model to analyze and classify news articles into categories based on their headlines. Using the **UCI News Aggregator Dataset**, the model distinguishes between four major topics: Business, Science & Technology, Entertainment, and Health.
+
+The solution involves a comprehensive Natural Language Processing (NLP) pipeline for cleaning text data and utilizes a **Logistic Regression** and **Naive Bayes** classifier to achieve high accuracy.
+
+## 📂 Dataset
+
+The model is trained on the [**AG News / UCI News Aggregator Dataset**](https://www.kaggle.com/datasets/uciml/news-aggregator-dataset/data).
+The dataset consists of news titles categorized into the following classes:
+
+* **b**: Business
+* **t**: Science and Technology
+* **e**: Entertainment
+* **m**: Health
 
 ## 📂 Project Structure
 
@@ -20,62 +34,61 @@ This project is part of the **Elevvo Pathways Internship (Task 1)**. It focuses 
 |── Dataset         # Dataset Folder
 ├── assets
 │   ├── acc.png
-│   └── words.png
+│   ├── words.png
+│   └── words2.png
 ├── .gitignore
 ├── Column.py       # A helper Python script
 ├── Model.ipynb     # The main Jupyter Notebook
 └── Readme.md
 ```
 
-## 🛠️ Features & Workflow
+## ⚙️ Methodology
 
 ### 1. Data Preprocessing
-The text data undergoes a rigorous cleaning pipeline to ensure high-quality input for the models:
-- **Lowercasing**: Converting all text to lowercase for consistency.
-- **Noise Removal**: Removing single characters and special characters using Regex.
-- **Tokenization**: Splitting sentences into individual words using NLTK.
-- **Stopword Removal**: Filtering out common English stopwords (excluding negation words like "not", "don't" to preserve sentiment context).
-- **Lemmatization**: Converting words to their base root form (e.g., "running" → "run") using `WordNetLemmatizer`.
 
-### 2. Feature Engineering
-- **TF-IDF Vectorization**: Converting cleaned text data into numerical vectors to reflect word importance.
+Raw text data is transformed into a clean format suitable for modeling through the following steps:
 
-### 3. Model Building
-The project implements and compares multiple algorithms:
-- **Logistic Regression**: A robust baseline for binary classification.
-- **Naive Bayes (MultinomialNB)**: Suitable for high-dimensional text data.
+* **Lowercasing**: Converting all text to lowercase for uniformity.
+* **Noise Removal**: Removing single letters and special characters.
+* **Tokenization**: Splitting sentences into individual words using NLTK.
+* **Stopword Removal**: Filtering out common English words (e.g., "the", "is", "at") that add little semantic meaning.
+* **Lemmatization**: Reducing words to their base forms (verbs).
+* **Punctuation Removal**: Stripping all punctuation marks.
+* **Reconstruction**: Converting token lists back into string format for vectorization.
 
-## 🧩 Helper Class (`Column.py`)
+### 2. Feature Extraction
 
-The `column` class is a custom utility designed to apply functions to pandas DataFrame columns efficiently without Reapeating Code.
+* **TF-IDF (Term Frequency-Inverse Document Frequency)**: The cleaned text is converted into numerical vectors using `TfidfVectorizer` with a maximum of **65,000 features**.
 
-```python
-# Example Usage
-from Column import column
-text_col = column(Dataset=df, Column_name="CleanedText")
-text_col.Update(func=lambda x: x.lower())
+### 3. Model Details
 
-```
+1- **Algorithm**: Logistic Regression.
+* **Hyperparameters**:
+* `solver`: 'saga' (efficient for large datasets).
+* `C`: 10 (Inverse of regularization strength).
+* `max_iter`: 1000 (To ensure convergence).
+
+2- **Algorithm**: Naive Bayes.
+* **Hyperparameters**: Default Hyperparameters
+
+> **Data Split**: The dataset is split into **80% training** and **20% testing** sets.
 
 ## 📊 Results
 
-* **Logistic Regression Accuracy**: 90.85%
-* **Weighted Logistic Regression Accuracy**: 90.60%
-* **Naive Bayes Accuracy**: 80.05%
+The model demonstrates strong performance on the test dataset:
+
+* **Logistic Regression Accuracy**: **~94.83%**
+* **Naive Bayes Accuracy**: **~92.35%**
+
+
 
 ## ✅ Models Accuracy Matrix
 
 ![Demo Image](assets/acc.png)
 
-## 📍 Most frequent **Positive** and **Negative** words
-
+## 📍 Visualize the most frequent Words in Classes With **Word Clouds**
 ![Demo Image](assets/words.png)
 
+## 📍 Visualize the most frequent Words in Dataset Classes
+![Demo Image](assets/words2.png)
 
-## 🚀 Getting Started
-
-### Prerequisites
-Make sure you have Python installed along with the following libraries:
-
-```bash
-pip install pandas numpy seaborn matplotlib nltk scikit-learn
