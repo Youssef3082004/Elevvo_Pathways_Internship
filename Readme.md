@@ -17,7 +17,7 @@ This repository contains the projects and tasks completed for **the Elevvo Pathw
 **Branch Naming Convention:**
 * `task_1:` [**Sentiment Analysis**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_1)
 * `task_2:` [**News Classification**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_2)
-* `task_3:` **Fake News Detection**
+* `task_3:` [**Fake News Detection**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_3)
 * `task_4:` **Ner Extraction**
 * `task_5:` **Topic Modeling**
 * `task_6:` **QA Transformers**
