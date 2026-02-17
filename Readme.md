@@ -72,10 +72,4 @@ text_col.Update(func=lambda x: x.lower())
 ![Demo Image](assets/words.png)
 
 
-## 🚀 Getting Started
-
-### Prerequisites
-Make sure you have Python installed along with the following libraries:
-
-```bash
-pip install pandas numpy seaborn matplotlib nltk scikit-learn
+<h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 1</h3>
