@@ -76,3 +76,6 @@ The models were evaluated using Accuracy and F1-Score.
 
 ## 📍 Visualize the most frequent Words in **Fake News**
 ![Demo Image](assets/words2.png)
+
+---
+<h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 2</h3>
