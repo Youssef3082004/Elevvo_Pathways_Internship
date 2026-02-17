@@ -21,9 +21,9 @@ The project uses the **[CoNLL-2003 English Version](https://www.kaggle.com/datas
 
 * **Format**: IOB/BIO tagging system.
   
-**Entities**: Person (PER), Organization (ORG), Location (LOC), and Miscellaneous (MISC).
+* **Entities**: Person (PER), Organization (ORG), Location (LOC), and Miscellaneous (MISC).
 
-**Files**: `train.txt`, `valid.txt`, and `test.txt`.
+* **Files**: `train.txt`, `valid.txt`, and `test.txt`.
 
 
 
