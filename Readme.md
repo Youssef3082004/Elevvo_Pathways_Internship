@@ -1,78 +1,92 @@
-# Fake News Classification Model
+# Named Entity Recognition (NER) from News Articles
+
 
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.13+-3776AB?style=for-the-badge&logo=python&logoColor=3776AB)](https://python.org)
+[![scikit-learn](https://img.shields.io/badge/Spacy-3.8.7-F7931E?style=for-the-badge&logo=spacy&logoColor=white)](https://scikit-learn.org)
 [![Pandas](https://img.shields.io/badge/Pandas-2.2.3+-3776AB?style=for-the-badge&logo=pandas&logoColor=white)](https://python.org)
-[![NumPy](https://img.shields.io/badge/NumPy-1.26+-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.4+-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-3.9+-11557C?style=for-the-badge&logo=matplotlib&logoColor=white)](https://matplotlib.org)
 [![Seaborn](https://img.shields.io/badge/Seaborn-0.13+-4C72B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
-[![Seaborn](https://img.shields.io/badge/nltk-3.9.0+-472B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
+
 </div>
 
 ## 📑 Description
-This project builds a Machine Learning model to classify news articles as **Real** or **Fake**. It utilizes Natural Language Processing (NLP) techniques for text preprocessing and feature extraction, comparing two classification algorithms: **Logistic Regression** and **Multinomial Naive Bayes**.
 
-The model achieves high accuracy in distinguishing between legitimate news and fake news based on textual content.
+This project implements a **Named Entity Recognition (NER)** system to identify and categorize entities such as people, locations, and organizations within news articles. The system utilizes the **CoNLL 2003** dataset and compares multiple extraction strategies, including manual rule-based patterns and advanced transformer-based statistical models.
 
 ## 📂 Dataset
-The project uses the [**Fake and Real News Dataset**](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset/data) (likely from Kaggle), consisting of two CSV files:
-* `True.csv`: Contains articles identified as real news (Class `0`).
-* `Fake.csv`: Contains articles identified as fake news (Class `1`).
+
+The project uses the **[CoNLL-2003 English Version](https://www.kaggle.com/datasets/alaakhaled/conll003-englishversion/data)** dataset from Kaggle.
+
+* **Format**: IOB/BIO tagging system.
+  
+**Entities**: Person (PER), Organization (ORG), Location (LOC), and Miscellaneous (MISC).
+
+**Files**: `train.txt`, `valid.txt`, and `test.txt`.
 
 
 
 ## 📁 Project Structure
+
 ```
-|── Dataset         # Dataset Folder
+├── Dataset
+│   ├── train.txt         # CoNLL-2003 raw text files
+│   ├── valid.txt
+│   └── test.txt
 ├── assets
 │   ├── acc.png
 │   ├── words.png
 │   └── words2.png
 ├── .gitignore
-├── Column.py       # A helper Python script
-├── Model.ipynb     # The main Jupyter Notebook
+├── Model.ipynb         # Main implementation and model 
 └── Readme.md
 ```
 
-
 ## ⚙️ Methodology
 
-### 1. Data Preprocessing
-* **Loading**: Merging `True.csv` and `Fake.csv` into a single dataframe.
-* **Cleaning**:
-    * Lowercasing text.
-    * Removing single characters.
-    * Removing non-alphabetic characters (special symbols, numbers).
-    * (Utilizes a helper module `Column.py` for column-specific updates).
-* **Feature Extraction**:
-    * **TF-IDF Vectorizer**: Converts text into numerical vectors.
-    * *Parameters*: `max_features=65000`, `ngram_range=(1, 3)` (Unigrams, Bigrams, and Trigrams).
+### 1. Data Preparation
 
-### 2. Model Training
-The dataset is split into training (80%) and testing (20%) sets. Two models are trained:
+* **Parsing**: A custom `Load_data` function processes the CoNLL text files, skipping document headers (`-DOCSTART-`) and joining tokens into full sentences for processing.
 
-1.  **Logistic Regression** (Solver: `saga`, `C=0.1`)
-2.  **Multinomial Naive Bayes**
 
-## 📊 Results
+* **Consolidation**: Training, validation, and test sets are merged into a primary `Dataset` for broad analysis.
 
-The models were evaluated using Accuracy and F1-Score.
 
-| Model | Accuracy | F1-Score |
-| :--- | :--- | :--- |
-| **Logistic Regression** | **98.30%** | **98.35%** |
-| **Naive Bayes** | 96.54% | 96.67% |
 
-*Logistic Regression proved to be the superior model for this specific dataset and feature set.*
+### 2. NER Approaches
 
-## ✅ Models Accuracy Matrix
+* **Rule-Based**: Implemented using spaCy's `EntityRuler` to define explicit patterns for specific entities (e.g., "Apple Inc" as an ORG).
 
-![Demo Image](assets/acc.png)
 
-## 📍 Visualize the most frequent Words in **Real News**
-![Demo Image](assets/words.png)
+* **Model-Based (Small)**: Utilizes the `en_core_web_sm` model, a lightweight statistical hybrid for fast extraction.
 
-## 📍 Visualize the most frequent Words in **Fake News**
-![Demo Image](assets/words2.png)
+
+* **Model-Based (Transformer)**: Utilizes the `en_core_web_trf` model, a RoBERTa-based transformer for state-of-the-art accuracy.
+
+
+
+### 3. Comparison & Categorization
+
+* The models are compared by processing a subset of 200 sentences.
+
+
+* Entities are categorized into a structured Pandas DataFrame containing the Entity text, Label, and the source Model.
+
+
+## 📊 Results & Visualization
+
+### Model Comparison
+
+The project provides a statistical breakdown of how different models categorize the same text. The Transformer model consistently identifies more nuanced entities (like `GPE` and `NORP`) compared to the lightweight model.
+
+
+![Demo Image](assets/labels.png)
+
+
+
+
+
+---
+
+<h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 2</h3>
