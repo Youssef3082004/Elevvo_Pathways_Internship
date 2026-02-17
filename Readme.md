@@ -11,7 +11,7 @@
 [![Seaborn](https://img.shields.io/badge/nltk-3.9.0+-472B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
 </div>
 
-## 📌 Overview
+## 📑 Description
 This project builds a Machine Learning model to classify news articles as **Real** or **Fake**. It utilizes Natural Language Processing (NLP) techniques for text preprocessing and feature extraction, comparing two classification algorithms: **Logistic Regression** and **Multinomial Naive Bayes**.
 
 The model achieves high accuracy in distinguishing between legitimate news and fake news based on textual content.
