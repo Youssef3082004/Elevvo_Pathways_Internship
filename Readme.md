@@ -71,5 +71,5 @@ text_col.Update(func=lambda x: x.lower())
 
 ![Demo Image](assets/words.png)
 
-
+---
 <h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 1</h3>
