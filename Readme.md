@@ -53,7 +53,7 @@ The project uses the [**Fake and Real News Dataset**](https://www.kaggle.com/dat
 ### 2. Model Training
 The dataset is split into training (80%) and testing (20%) sets. Two models are trained:
 
-1.  **Logistic Regression** (Solver: `saga`, `C=10`)
+1.  **Logistic Regression** (Solver: `saga`, `C=0.1`)
 2.  **Multinomial Naive Bayes**
 
 ## 📊 Results
@@ -62,7 +62,7 @@ The models were evaluated using Accuracy and F1-Score.
 
 | Model | Accuracy | F1-Score |
 | :--- | :--- | :--- |
-| **Logistic Regression** | **99.74%** | **99.75%** |
+| **Logistic Regression** | **98.30%** | **98.35%** |
 | **Naive Bayes** | 96.54% | 96.67% |
 
 *Logistic Regression proved to be the superior model for this specific dataset and feature set.*
