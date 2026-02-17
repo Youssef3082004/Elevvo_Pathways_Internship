@@ -92,3 +92,5 @@ The model demonstrates strong performance on the test dataset:
 ## 📍 Visualize the most frequent Words in Dataset Classes
 ![Demo Image](assets/words2.png)
 
+---
+<h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 1</h3>
