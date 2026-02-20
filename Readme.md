@@ -1,4 +1,4 @@
-# Fake News Classification Model
+# BBC News Topic Modeling
 
 <div align="center">
 
@@ -11,23 +11,48 @@
 [![Seaborn](https://img.shields.io/badge/nltk-3.9.0+-472B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
 </div>
 
-## 📑 Description
-This project builds a Machine Learning model to classify news articles as **Real** or **Fake**. It utilizes Natural Language Processing (NLP) techniques for text preprocessing and feature extraction, comparing two classification algorithms: **Logistic Regression** and **Multinomial Naive Bayes**.
+## 🚀 Overview
 
-The model achieves high accuracy in distinguishing between legitimate news and fake news based on textual content.
+This repository contains a Jupyter Notebook (`Model.ipynb`) that demonstrates how to perform Topic Modeling on a BBC News dataset using Natural Language Processing (NLP) techniques and Machine Learning pipelines.
 
-## 📂 Dataset
-The project uses the [**Fake and Real News Dataset**](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset/data) (likely from Kaggle), consisting of two CSV files:
-* `True.csv`: Contains articles identified as real news (Class `0`).
-* `Fake.csv`: Contains articles identified as fake news (Class `1`).
 
+
+## ⚙️ Methodology
+
+The notebook covers the entire pipeline from raw text to topic extraction:
+
+1. **Data Loading & Consolidation:** - Reads [**The BBC News dataset**](https://www.kaggle.com/datasets/gpreda/bbc-news/data) and creates a unified `text` feature by combining the article `title` and `description`.
+   - Cleans missing values and duplicate rows.
+   
+2. **Text Cleaning & Preprocessing (via Custom `Column` class):** 
+   - Lowercasing all text.
+   - Removing single-letter words and all punctuation using Regular Expressions.
+   - Tokenization.
+   - Stopwords removal using NLTK (`stopwords.words("english")`).
+   - Lemmatization using `WordNetLemmatizer`.
+
+3. **Modeling:**
+   - Evaluates word frequencies using **TF-IDF Vectorization** (`TfidfVectorizer`).
+   - Builds two separate Scikit-Learn `Pipeline`s to discover 20 underlying topics:
+     - **Latent Dirichlet Allocation (LDA)**
+     - **Non-Negative Matrix Factorization (NMF)**
+
+4. **Visualization & Analysis:**
+   - Extracts and displays the top 10 contributing words for each topic.
+   - Classifies individual news rows into their dominant topics.
+   - Provides an interactive HTML visualization of the LDA model using `pyLDAvis`.
+
+## 🛠️ Technologies Used
+* **Data Manipulation:** `pandas`, `numpy`, `re`
+* **NLP:** `nltk` (corpus, tokenize, stem)
+* **Machine Learning:** `scikit-learn` (Pipelines, TfidfVectorizer, LatentDirichletAllocation, NMF)
+* **Visualization:** `pyLDAvis`, `matplotlib`, `wordcloud`
 
 
 ## 📁 Project Structure
 ```
 |── Dataset         # Dataset Folder
 ├── assets
-│   ├── acc.png
 │   ├── words.png
 │   └── words2.png
 ├── .gitignore
@@ -37,44 +62,11 @@ The project uses the [**Fake and Real News Dataset**](https://www.kaggle.com/dat
 ```
 
 
-## ⚙️ Methodology
 
-### 1. Data Preprocessing
-* **Loading**: Merging `True.csv` and `Fake.csv` into a single dataframe.
-* **Cleaning**:
-    * Lowercasing text.
-    * Removing single characters.
-    * Removing non-alphabetic characters (special symbols, numbers).
-    * (Utilizes a helper module `Column.py` for column-specific updates).
-* **Feature Extraction**:
-    * **TF-IDF Vectorizer**: Converts text into numerical vectors.
-    * *Parameters*: `max_features=65000`, `ngram_range=(1, 3)` (Unigrams, Bigrams, and Trigrams).
+## 📍 Visualize the most frequent Words in **LDA** Topics
+![Demo Image](assets/words.png) 
 
-### 2. Model Training
-The dataset is split into training (80%) and testing (20%) sets. Two models are trained:
-
-1.  **Logistic Regression** (Solver: `saga`, `C=0.1`)
-2.  **Multinomial Naive Bayes**
-
-## 📊 Results
-
-The models were evaluated using Accuracy and F1-Score.
-
-| Model | Accuracy | F1-Score |
-| :--- | :--- | :--- |
-| **Logistic Regression** | **98.30%** | **98.35%** |
-| **Naive Bayes** | 96.54% | 96.67% |
-
-*Logistic Regression proved to be the superior model for this specific dataset and feature set.*
-
-## ✅ Models Accuracy Matrix
-
-![Demo Image](assets/acc.png)
-
-## 📍 Visualize the most frequent Words in **Real News**
-![Demo Image](assets/words.png)
-
-## 📍 Visualize the most frequent Words in **Fake News**
+## 📍 Visualize the most frequent Words in **NMF** Topics
 ![Demo Image](assets/words2.png)
 
 ---
