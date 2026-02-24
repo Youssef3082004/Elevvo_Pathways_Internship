@@ -1,73 +1,77 @@
-# BBC News Topic Modeling
-
+# Question Answering System (SQuAD Evaluation)
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.13+-3776AB?style=for-the-badge&logo=python&logoColor=3776AB)](https://python.org)
-[![Pandas](https://img.shields.io/badge/Pandas-2.2.3+-3776AB?style=for-the-badge&logo=pandas&logoColor=white)](https://python.org)
-[![NumPy](https://img.shields.io/badge/NumPy-1.26+-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.4+-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.9+-11557C?style=for-the-badge&logo=matplotlib&logoColor=white)](https://matplotlib.org)
-[![Seaborn](https://img.shields.io/badge/Seaborn-0.13+-4C72B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
-[![Seaborn](https://img.shields.io/badge/nltk-3.9.0+-472B0?style=for-the-badge&logo=python&logoColor=white)](https://seaborn.pydata.org)
+[![huggingface](https://img.shields.io/badge/huggingface-5.2.0-ffd21e?style=for-the-badge&logo=huggingface&logoColor=ffd21e)](https://huggingface.co/)
+[![PYTorch](https://img.shields.io/badge/PYtorch-2.7.0-orange?style=for-the-badge&logo=pytorch&logoColor=orange)](https://pytorch.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-2.2.3-purple?style=for-the-badge&logo=pandas&logoColor=purple)](https://pandas.pydata.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-2.2.6-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
+
+
 </div>
 
-## 🚀 Overview
+# 📑 Description
+This repository contains tools for processing Question Answering datasets and evaluating the **DistilBERT** model on the [**SQuAD (Stanford Question Answering Dataset)**](https://www.kaggle.com/datasets/stanfordu/stanford-question-answering-dataset) task.
 
-This repository contains a Jupyter Notebook (`Model.ipynb`) that demonstrates how to perform Topic Modeling on a BBC News dataset using Natural Language Processing (NLP) techniques and Machine Learning pipelines.
-
-
-
-## ⚙️ Methodology
-
-The notebook covers the entire pipeline from raw text to topic extraction:
-
-1. **Data Loading & Consolidation:** - Reads [**The BBC News dataset**](https://www.kaggle.com/datasets/gpreda/bbc-news/data) and creates a unified `text` feature by combining the article `title` and `description`.
-   - Cleans missing values and duplicate rows.
-   
-2. **Text Cleaning & Preprocessing (via Custom `Column` class):** 
-   - Lowercasing all text.
-   - Removing single-letter words and all punctuation using Regular Expressions.
-   - Tokenization.
-   - Stopwords removal using NLTK (`stopwords.words("english")`).
-   - Lemmatization using `WordNetLemmatizer`.
-
-3. **Modeling:**
-   - Evaluates word frequencies using **TF-IDF Vectorization** (`TfidfVectorizer`).
-   - Builds two separate Scikit-Learn `Pipeline`s to discover 20 underlying topics:
-     - **Latent Dirichlet Allocation (LDA)**
-     - **Non-Negative Matrix Factorization (NMF)**
-
-4. **Visualization & Analysis:**
-   - Extracts and displays the top 10 contributing words for each topic.
-   - Classifies individual news rows into their dominant topics.
-   - Provides an interactive HTML visualization of the LDA model using `pyLDAvis`.
-
-## 🛠️ Technologies Used
-* **Data Manipulation:** `pandas`, `numpy`, `re`
-* **NLP:** `nltk` (corpus, tokenize, stem)
-* **Machine Learning:** `scikit-learn` (Pipelines, TfidfVectorizer, LatentDirichletAllocation, NMF)
-* **Visualization:** `pyLDAvis`, `matplotlib`, `wordcloud`
-
-
-## 📁 Project Structure
+## 📂 Project Structure
 ```
-|── Dataset         # Dataset Folder
-├── assets
-│   ├── words.png
-│   └── words2.png
+├── Dataset
+│   ├── dev.json
+│   ├── train.json
+│   └── train.csv
 ├── .gitignore
-├── Column.py       # A helper Python script
-├── Model.ipynb     # The main Jupyter Notebook
+├── Json_Converter.ipynb
+├── Model.ipynb
 └── Readme.md
 ```
 
+## 🚀 Getting Started
 
+### Prerequisites
 
-## 📍 Visualize the most frequent Words in **LDA** Topics
-![Demo Image](assets/words.png) 
+* Ensure you have the following libraries installed:
 
-## 📍 Visualize the most frequent Words in **NMF** Topics
-![Demo Image](assets/words2.png)
+```bash
+pip install torch pandas transformers datasets tqdm
+
+```
+
+### Model Information
+
+* The project utilizes the `distilbert-base-cased-distilled-squad` model from Hugging Face. This model is a smaller, faster, and cheaper version of BERT, specifically fine-tuned for extractive question answering.
+
+### Evaluation Metrics
+
+The system evaluates the predicted answers against ground truth using:
+
+* **Exact Match (EM):** Measures the percentage of predictions that match the ground truth answers exactly.
+* **F1 Score:** Measures the average overlap between the prediction and the ground truth tokens.
+
+## 🚩 Model Performance Metrics
+* **F1 Score: 84.81%**
+* **Exact Match (EM): 72.0%**
+
+**Evaluation Setup**
+
+* **Model:** `distilbert-base-cased-distilled-squad`
+* **Dataset:** SQuAD (Stanford Question Answering Dataset)
+* **Sample Size:** The metrics above were derived from evaluating 100 samples from the dataset.
+
+## 🛠️ Usage
+
+1. **Data Preparation**: Use `Json_Converter.ipynb` to parse your raw SQuAD-style JSON files into a structured tabular format.
+2. **Inference**: Run `Model.ipynb` to load the model and tokenizer. Use the `get_answer(question, context)` function to extract answers from text.
+3. **Evaluation**: The notebook provides a pipeline to iterate through the dataset and calculate the overall accuracy of the model.
+
+## 📊 Sample Data Format
+
+The processed dataset includes the following fields:
+
+* `Title`: The topic of the context.
+* `Context`: The background text.
+* `Question`: The query to be answered.
+* `Answer_Text`: The ground truth answer.
+* `Answer_Start`: The character index where the answer begins.
 
 ---
-<h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 2</h3>
+<h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 3</h3>
