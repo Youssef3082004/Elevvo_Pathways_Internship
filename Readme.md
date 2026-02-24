@@ -20,7 +20,7 @@ This repository contains the projects and tasks completed for **the Elevvo Pathw
 * `task_3:` [**Fake News Detection**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_3)
 * `task_4:` [**NER Extraction**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_4)
 * `task_5:` [**Topic Modeling**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_5)
-* `task_6:` **QA Transformers**
+* `task_6:` [**QA Transformers**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_6)
 * `task_7:` **Text Summarization**
 * `task_8:`  **Resume Screening**
 
