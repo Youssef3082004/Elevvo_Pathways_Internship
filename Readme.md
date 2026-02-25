@@ -1,4 +1,4 @@
-# Question Answering System (SQuAD Evaluation)
+# Text Summarization System (Abstractive & Extractive)
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.13+-3776AB?style=for-the-badge&logo=python&logoColor=3776AB)](https://python.org)
@@ -11,16 +11,18 @@
 </div>
 
 ## 📑 Description
-This repository contains tools for processing Question Answering datasets and evaluating the **DistilBERT** model on the [**SQuAD (Stanford Question Answering Dataset)**](https://www.kaggle.com/datasets/stanfordu/stanford-question-answering-dataset) task.
+This Branch contains a complete pipeline for performing **Text Summarization** on news articles. It explores two distinct methodologies:
+1. **Abstractive Summarization:** Using the `google/pegasus-xsum` model to generate concise, human-like summaries from scratch.
+2. **Extractive Summarization:** Using the TextRank algorithm (via the `sumy` library) to identify and extract the most important sentences directly from the source text
+
 
 ## 📂 Project Structure
 ```
 ├── Dataset
-│   ├── dev.json
-│   ├── train.json
-│   └── train.csv
+│   ├── train.csv
+│   ├── test.csv
+│   └── validation.csv
 ├── .gitignore
-├── Json_Converter.ipynb
 ├── Model.ipynb
 └── Readme.md
 ```
@@ -32,46 +34,46 @@ This repository contains tools for processing Question Answering datasets and ev
 * Ensure you have the following libraries installed:
 
 ```bash
-pip install torch pandas transformers datasets tqdm
+pip install torch pandas numpy transformers rouge_score sumy nltk
 
 ```
 
 ### Model Information
 
-* The project utilizes the `distilbert-base-cased-distilled-squad` model from Hugging Face. This model is a smaller, faster, and cheaper version of BERT, specifically fine-tuned for extractive question answering.
+* **Abstractive Model:** The project utilizes the `google/pegasus-xsum` model from Hugging Face. This model is a state-of-the-art encoder-decoder architecture fine-tuned specifically on the XSum dataset to generate punchy, highly abstractive summaries.
+* **Extractive Model:** The project uses the **TextRank** algorithm, a graph-based ranking model for text processing, implemented via the `sumy` library.
 
 ### Evaluation Metrics
 
-The system evaluates the predicted answers against ground truth using:
+The abstractive summarization system evaluates the predicted summaries against the ground truth reference highlights using the **ROUGE** metric:
 
-* **Exact Match (EM):** Measures the percentage of predictions that match the ground truth answers exactly.
-* **F1 Score:** Measures the average overlap between the prediction and the ground truth tokens.
+* **ROUGE-1:** Measures the overlap of unigrams (single words).
+* **ROUGE-2:** Measures the overlap of bigrams (two-word phrases).
+* **ROUGE-L:** Measures the Longest Common Subsequence (LCS) to capture sentence structure and fluency.
 
 ## 🚩 Model Performance Metrics
-* **F1 Score: 84.81%**
-* **Exact Match (EM): 72.0%**
 
-**Evaluation Setup**
+Based on the batched evaluation sample inside `Model.ipynb`:
 
-* **Model:** `distilbert-base-cased-distilled-squad`
-* **Dataset:** SQuAD (Stanford Question Answering Dataset)
-* **Sample Size:** The metrics above were derived from evaluating 100 samples from the dataset.
+* **Average ROUGE-1 F1 Score:** 26.79% (0.2679)
+* **Average ROUGE-2 F1 Score:** 9.64% (0.0964)
+* **Average ROUGE-L F1 Score:** 17.82% (0.1782)
 
 ## 🛠️ Usage
 
-1. **Data Preparation**: Use `Json_Converter.ipynb` to parse your raw SQuAD-style JSON files into a structured tabular format.
-2. **Inference**: Run `Model.ipynb` to load the model and tokenizer. Use the `get_answer(question, context)` function to extract answers from text.
-3. **Evaluation**: The notebook provides a pipeline to iterate through the dataset and calculate the overall accuracy of the model.
+1. **Data Preparation**: Ensure your target articles are in a structured tabular format (e.g., CSV) containing at least an `article` and `highlights` column. (`Json_Converter.ipynb` is also provided as a utility for parsing raw JSON files into CSV).
+2. **Abstractive Inference**: Run `Model.ipynb` to load the Pegasus model and tokenizer. The notebook batches the inputs and pushes them to the GPU for accelerated generation.
+3. **Evaluation**: The notebook provides a pipeline to iterate through the generated summaries and calculate overall ROUGE scores.
+4. **Extractive Inference**: Run the Bonus Task section at the end of the notebook to parse texts and generate extractive TextRank summaries.
 
 ## 📊 Sample Data Format
 
-The processed dataset includes the following fields:
+The primary dataset used for summarization evaluation is structured as follows:
 
-* `Title`: The topic of the context.
-* `Context`: The background text.
-* `Question`: The query to be answered.
-* `Answer_Text`: The ground truth answer.
-* `Answer_Start`: The character index where the answer begins.
+* `id`: Unique identifier for the document.
+* `article`: The full background text of the news article.
+* `highlights`: The ground truth reference summary (bullet points or short sentences).
+* `generated_summary`: The output generated by the Pegasus model.
 
 ---
 <h3 align="center">Developed as part of the Elevvo Pathways Internship - Level 3</h3>
