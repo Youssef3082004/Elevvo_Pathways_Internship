@@ -1,6 +1,7 @@
 from flet import * 
 from Screens.Intro import Intro
-
+from Screens.EmployerCV import EmployerCV
+from Screens.JobCV import JobCV
  
 class Main_application(Container):
     def __init__(self,page:Page):
@@ -26,13 +27,13 @@ class Main_application(Container):
         if self.page.route == "/Intro":
             self.page.views.append(View("/Intro",[self.Intro_Screen],padding=0,appbar=self.Intro_Screen.appbar))
         
-        # elif self.page.route == "/employer":
-        #     # adminScreen_class = EmployerScreen(page=self.page)
-        #     self.page.views.append(View("/employer",[adminScreen_class],padding=0,appbar=adminScreen_class.appbar,bgcolor="#f6f8f6"))
+        elif self.page.route == "/EmployerCV":
+            EmployerCVScreen_class = EmployerCV(page=self.page)
+            self.page.views.append(View("/EmployerCV",[EmployerCVScreen_class],padding=0,appbar=EmployerCVScreen_class.appbar,bgcolor="#f6f8f6"))
         
-        # elif self.page.route == "/supervisor":
-        #     # adminScreen_class = SupervisorScreen(page=self.page)
-        #     self.page.views.append(View("/supervisor",[adminScreen_class],padding=0,appbar=adminScreen_class.appbar,bgcolor="#f6f8f6"))
+        elif self.page.route == "/JobCV":
+            JobCVScreen_class = JobCV(page=self.page)
+            self.page.views.append(View("/JobCV",[JobCVScreen_class],padding=0,appbar=JobCVScreen_class.appbar,bgcolor="#f6f8f6"))
 
         # elif self.page.route == "/newclient":
         #     # adminScreen_class = NewClientScreen(page=self.page)            

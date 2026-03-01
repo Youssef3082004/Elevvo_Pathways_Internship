@@ -45,8 +45,8 @@ class Intro(Container):
         buttonColors = {ControlState.HOVERED: Colors.WHITE,ControlState.DEFAULT: Colors.WHITE}
         buttonbgcolors = {ControlState.HOVERED: Colors.BLUE,ControlState.DEFAULT: Colors.BLUE_900}
 
-        self.matchcv_btn =  ElevatedButton(text="Find Jobs by Uploading Resume",icon=Icons.DOCUMENT_SCANNER, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
-        self.matchjobdescription_btn =  ElevatedButton(text="Find Employers by Job Description",icon=Icons.SEARCH, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
+        self.matchcv_btn =  ElevatedButton(text="Find Jobs by Uploading Resume",on_click=lambda e:self.add_cldld(),icon=Icons.DOCUMENT_SCANNER, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
+        self.matchjobdescription_btn =  ElevatedButton(text="Find Employers by Job Description",on_click=lambda e:self.page.go("/JobCV"),icon=Icons.SEARCH, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
 
         self.buttonsRow = Row(controls=[self.matchcv_btn,self.matchjobdescription_btn],alignment=MainAxisAlignment.CENTER)
         
@@ -57,3 +57,13 @@ class Intro(Container):
 
 
         ],alignment=MainAxisAlignment.CENTER)
+    
+
+
+        
+    def add_cldld(self):
+        self.page.go("/EmployerCV")
+        progress_ring_row = Row(controls=[ProgressRing(color=Colors.BLUE),Text(value="Plesae Wait ...",style=TextStyle(weight=FontWeight.W_600))], alignment=MainAxisAlignment.CENTER)
+        self.content.controls[0].controls.append(progress_ring_row)            
+        self.page.update()
+        self.update()
