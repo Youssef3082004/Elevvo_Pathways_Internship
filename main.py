@@ -1,8 +1,11 @@
 from flet import * 
+from DataTransmiter import DataTransmiter
 from Screens.Intro import Intro
 from Screens.EmployerCV import EmployerCV
 from Screens.JobCV import JobCV
- 
+from Screens.EmployerRank import EmployerRank
+import pandas as pd
+
 class Main_application(Container):
     def __init__(self,page:Page):
         super().__init__()
@@ -35,9 +38,9 @@ class Main_application(Container):
             JobCVScreen_class = JobCV(page=self.page)
             self.page.views.append(View("/JobCV",[JobCVScreen_class],padding=0,appbar=JobCVScreen_class.appbar,bgcolor="#f6f8f6"))
 
-        # elif self.page.route == "/newclient":
-        #     # adminScreen_class = NewClientScreen(page=self.page)            
-        #     self.page.views.append(View("/newclient",[adminScreen_class],padding=0,appbar=adminScreen_class.appbar,bgcolor="#f6f8f6"))
+        elif self.page.route == "/EmployerRank":
+            adminScreen_class = EmployerRank(page=self.page,Results=DataTransmiter.Get_Results())
+            self.page.views.append(View("/newclient",[adminScreen_class],padding=0,appbar=adminScreen_class.appbar,bgcolor="#f6f8f6"))
         
         # elif self.page.route == "/client":
         #     Client_class = ClientScreen(page=self.page,Client_data=self.login_Screen.Client_Data)            
