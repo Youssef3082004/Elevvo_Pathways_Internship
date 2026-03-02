@@ -1,13 +1,15 @@
 from flet import * 
 import pandas as pd
-import numpy as np 
 import webbrowser
+from Employer import Employer
+import re
 
 class EmployerRank(Container):
-    def __init__(self, page: Page, Results: pd.DataFrame = None):
+    def __init__(self, page: Page, Results: pd.DataFrame = None,CVText:str = None):
         super().__init__()
         self.page = page
         self.Results = Results
+        self.CVText = CVText
         self.padding = 20
         self.expand = True
         self.alignment = alignment.top_center
@@ -15,7 +17,7 @@ class EmployerRank(Container):
         self.Height = self.page.window.height 
         self.page.padding  = 20
 
-        exit_button = IconButton(icon=Icons.ARROW_FORWARD_IOS_ROUNDED,icon_color=Colors.BLUE_500,on_click=lambda e:self.page.go(f"{self.page.views[-2].route}"))
+        exit_button = IconButton(icon=Icons.ARROW_BACK_IOS_ROUNDED,icon_color=Colors.BLUE_500,on_click=lambda e:self.page.go(f"{self.page.views[-2].route}"))
         apppbar_Title = Text("Jobs & Resume Ranker", weight=FontWeight.W_500) 
         self.appbar = AppBar(leading=exit_button, title=apppbar_Title, bgcolor=Colors.WHITE)
 
@@ -38,7 +40,10 @@ class EmployerRank(Container):
                     Text("Top Match", size=20, weight=FontWeight.BOLD, color=Colors.WHITE),
                 ], alignment=MainAxisAlignment.SPACE_BETWEEN),
                 
-                Text(f"{top_match['Company']}", size=24, weight=FontWeight.W_900, color=Colors.WHITE),
+                Text(spans=[
+                TextSpan(text=f"{top_match['Job Title']} in ",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLACK,size=24)),
+                TextSpan(text=f"{top_match['Company']}",style=TextStyle(weight=FontWeight.BOLD,color=Colors.WHITE,size=24))
+                ],text_align=TextAlign.LEFT),
                 Row([
                    IconButton(icon=Icons.LOCATION_ON,icon_color=Colors.WHITE,on_click= lambda e:webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={top_match["latitude"]},{top_match["longitude"]}")), 
                    Text(f"{top_match['location']}, {top_match['Country']}", size=14, color=Colors.WHITE70),
@@ -62,6 +67,15 @@ class EmployerRank(Container):
                 ]),
                 
                 Text(top_match['Job Description'], size=14, color=Colors.WHITE, max_lines=3, overflow=TextOverflow.ELLIPSIS),
+                
+                Row([ 
+                Container(content=Text(f"{skill}", weight=FontWeight.BOLD, color=Colors.BLUE_700),
+                            bgcolor=Colors.BLUE_100,
+                            padding=padding.symmetric(horizontal=10, vertical=5),
+                            border_radius=10
+                            ) for skill in Employer.extract_skills(text=self.CVText,knowsSkills=re.findall(pattern=r"\b[A-Z]+[a-z]*(?:\s+[a-z]+)*",string=top_match["skills"]))]),
+                            
+
                 
                 # Match Score Badge
                 Container(
@@ -94,12 +108,22 @@ class EmployerRank(Container):
                         padding=15,
                         content=ListTile(
                             leading=IconButton(icon=Icons.LOCATION_ON,icon_color=Colors.BLUE_GREY_800,icon_size=30 ,on_click= lambda e:webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={row["latitude"]},{row["longitude"]}")),
-                            title=Text(f"{row['Company']}", weight=FontWeight.BOLD),
-                            subtitle=Column([
+                            title= Text(spans=[
+                                    TextSpan(text=f"{row['Job Title']} in ",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLACK,size=24)),
+                                    TextSpan(text=f"{row['Company']}",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLUE,size=24))
+                                    ],text_align=TextAlign.LEFT),
+                            subtitle=Column(controls=[
                                 Text(f"{row['location']}, {row['Country']} • {row['Salary Range']}", weight=FontWeight.W_600,size=12, color=Colors.BLACK45),
                                 Text(f"{row['Contact Person']}: {row['Contact']}", size=14, color=Colors.GREY_600),
-                                Text(row['Job Description'], size=12, max_lines=1, overflow=TextOverflow.ELLIPSIS, color=Colors.GREY_500)
-                            ], spacing=2),
+                                Text(row['Job Description'], size=12, max_lines=1, overflow=TextOverflow.ELLIPSIS, color=Colors.GREY_500),
+                                 Row([ 
+                                    Container(content=Text(f"{skill}", weight=FontWeight.BOLD, color=Colors.BLUE_700),
+                                                bgcolor=Colors.BLUE_100,
+                                                padding=padding.symmetric(horizontal=10, vertical=5),
+                                                border_radius=10
+                                                ) for skill in Employer.extract_skills(text=self.CVText,knowsSkills=re.findall(pattern=r"\b[A-Z]+[a-z]*(?:\s+[a-z]+)*",string=row["skills"]))]),
+                                    
+                            ], spacing=5),
                             trailing=Container(
                                 content=Text(f"{row['Match_Score']:.1f}%", weight=FontWeight.BOLD, color=Colors.BLUE_700),
                                 bgcolor=Colors.BLUE_50,

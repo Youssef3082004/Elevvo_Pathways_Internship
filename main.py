@@ -39,7 +39,7 @@ class Main_application(Container):
             self.page.views.append(View("/JobCV",[JobCVScreen_class],padding=0,appbar=JobCVScreen_class.appbar,bgcolor="#f6f8f6"))
 
         elif self.page.route == "/EmployerRank":
-            adminScreen_class = EmployerRank(page=self.page,Results=DataTransmiter.Get_Results())
+            adminScreen_class = EmployerRank(page=self.page,Results=DataTransmiter.Get_Results(),CVText=DataTransmiter.Get_CVText())
             self.page.views.append(View("/newclient",[adminScreen_class],padding=0,appbar=adminScreen_class.appbar,bgcolor="#f6f8f6"))
         
         # elif self.page.route == "/client":

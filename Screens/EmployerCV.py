@@ -38,8 +38,8 @@ class EmployerCV(Container):
                 ],alignment=MainAxisAlignment.CENTER)
         
 
-        Jobtitle_options = [dropdown.Option(text=job,key=job) for job in self.emplower.Get_Jobs()]
-        self.jobtitle_input = Dropdown(width=250,autofocus=False,label="Job Title",label_style=TextStyle(color=Colors.BLUE,weight=FontWeight.W_600),border_radius=BorderRadius(10,10,10,10),border_width=1,max_menu_height=30,color ="#36618e",text_style=TextStyle(weight=FontWeight.W_500),options=Jobtitle_options)
+        Qualifications_options = [dropdown.Option(text=job,key=job) for job in self.emplower.Get_Qualifications()]
+        self.Qualifications_input = Dropdown(width=250,autofocus=False,label="Qualifications",label_style=TextStyle(color=Colors.BLUE,weight=FontWeight.W_600),border_radius=BorderRadius(10,10,10,10),border_width=1,max_menu_height=30,color ="#36618e",text_style=TextStyle(weight=FontWeight.W_500),options=Qualifications_options)
         
         Worktype_options = [dropdown.Option(text=job,key=job) for job in self.emplower.Get_WorkTypes()]
         self.Worktype_input = Dropdown(width=250,autofocus=False,label="Work Type",label_style=TextStyle(color=Colors.BLUE,weight=FontWeight.W_600),border_radius=BorderRadius(10,10,10,10),border_width=1,max_menu_height=30,color ="#36618e",text_style=TextStyle(weight=FontWeight.W_500),options=Worktype_options)
@@ -47,7 +47,7 @@ class EmployerCV(Container):
         Gender_options = [dropdown.Option(text=job,key=job) for job in ["Male","Female"]]
         self.Gender_input = Dropdown(width=250,autofocus=False,label="Gender",label_style=TextStyle(color=Colors.BLUE,weight=FontWeight.W_600),border_radius=BorderRadius(10,10,10,10),border_width=1,max_menu_height=30,color ="#36618e",text_style=TextStyle(weight=FontWeight.W_500),options=Gender_options)
         
-        self.description_Column = Column(controls=[self.description_header_row,Row(controls=[self.jobtitle_input,self.Worktype_input,self.Gender_input],alignment=MainAxisAlignment.CENTER)],expand=True,spacing=20,horizontal_alignment=CrossAxisAlignment.CENTER)
+        self.description_Column = Column(controls=[self.description_header_row,Row(controls=[self.Qualifications_input,self.Worktype_input,self.Gender_input],alignment=MainAxisAlignment.CENTER)],expand=True,spacing=20,horizontal_alignment=CrossAxisAlignment.CENTER)
         
         
         #! ======================================================= upload Resume ===================================================
@@ -99,9 +99,9 @@ class EmployerCV(Container):
         self.page.update()
 
         description = self.emplower.Read_CV(path=self.path)
-        DataTransmiter.set_Results(Results=self.emplower.GetTopJobs(Employer_Desc=description,Job_Title=self.jobtitle_input.value,Work_type=self.Worktype_input.value,Gender=self.Gender_input.value))
+        DataTransmiter.set_Results(Results=self.emplower.GetTopJobs(Employer_Desc=description,Qualifications=self.Qualifications_input.value,Work_type=self.Worktype_input.value,Gender=self.Gender_input.value))
+        DataTransmiter.set_CVText(cv=description)
         self.page.go("/EmployerRank")
-        self.main_column.controls.pop(-1)
         self.page.update()
 
     
