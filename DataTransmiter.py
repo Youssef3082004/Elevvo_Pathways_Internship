@@ -1,21 +1,40 @@
 import pandas as pd
 
-class DataTransmiter:
+class JobsDataTransmiter:
 
     results =  None
     cv = None
 
     @staticmethod
     def set_Results(Results:pd.DataFrame):
-        DataTransmiter.results = Results
+        JobsDataTransmiter.results = Results
     
     def Get_Results() -> pd.DataFrame:
-        return DataTransmiter.results
+        return JobsDataTransmiter.results
     
     @staticmethod
     def set_CVText(cv:str):
-        DataTransmiter.cv = cv
-    
+        JobsDataTransmiter.cv = cv
 
     def Get_CVText() -> str:
-        return DataTransmiter.cv
+        return JobsDataTransmiter.cv
+
+class EmployersDataTransmiter:
+
+    results = None
+    path = None
+
+    @staticmethod 
+    def set_Results(Results:list[tuple[str,float]]):
+        EmployersDataTransmiter.results = Results
+    
+    @staticmethod 
+    def Get_Results() -> list[tuple[str,float]]:
+        return EmployersDataTransmiter.results 
+    
+    @staticmethod
+    def set_Path(path:str):
+        EmployersDataTransmiter.path = path
+    
+    def Get_Path() -> str:
+        return EmployersDataTransmiter.path

@@ -1,6 +1,5 @@
-from flet import * 
-
-
+from flet import *
+from .Widgets.CustomWidgets import button_functions 
 
 class Intro(Container):
     def __init__(self,page:Page):
@@ -8,16 +7,15 @@ class Intro(Container):
         self.page = page
         self.padding = 40
         self.expand = True
-        # self.page.horizontal_alignment = CrossAxisAlignment.CENTER
-        # self.page.vertical_alignment = CrossAxisAlignment.CENTER
         self.alignment = alignment.center
+    
+        #! ======================================================= Variables and objects ===================================================
+        self.Header = button_functions(self.page)
         self.Width = self.page.window.width 
         self.Height = self.page.window.height 
-
-
-
+        #! ======================================================= Appbar ===================================================
         apppbar_Title = Text("Jobs & Resume Ranker",weight=FontWeight.W_500) 
-        self.appbar = AppBar(leading=Icon(Icons.DESCRIPTION,size=40,color=Colors.BLUE_500),title=apppbar_Title,bgcolor=Colors.WHITE)
+        self.appbar = AppBar(leading=Image(src=r"icons/cv.png",width=40,height=40,fit=ImageFit.COVER),title=apppbar_Title,bgcolor=Colors.WHITE,actions=self.Header.Get_Buttons())
 
         #! ======================================================= Headline ===================================================
         self.headline = Text(spans=[
@@ -25,10 +23,10 @@ class Intro(Container):
             TextSpan(text="Match in ",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLACK,size=40)),
             TextSpan(text="Seconds",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLUE,size=40))
             ])
-        self.headlineRow = Row(controls=[Icon(Icons.DESCRIPTION,size=80,color=Colors.BLUE_500),self.headline],alignment=MainAxisAlignment.CENTER)
+        self.headlineRow = Row(controls=[Image(src=r"icons/cv.png",fit=ImageFit.COVER,width=100,height=100),self.headline],alignment=MainAxisAlignment.CENTER)
        
         #! ======================================================= subtitle ===================================================
-        self.subtitle = Text("Revolutionize your hiring with our AI driven screeningprocess, Analyze resumes against job descriptions instantly with state of the art AI.",width=self.Width / 2,max_lines=3,text_align=TextAlign.CENTER,
+        self.subtitle = Text("Revolutionize your Hiring with our AI driven Screening process, Analyze Resumes Against Job Descriptions Instantly with State of the Art AI",width=self.Width / 2,max_lines=3,text_align=TextAlign.CENTER,
         style=TextStyle(color=Colors.GREY_700,size=20,weight=FontWeight.W_500))
         
         self.subtitleRow = Row(controls=[self.subtitle],alignment=MainAxisAlignment.CENTER)
@@ -45,15 +43,13 @@ class Intro(Container):
         buttonColors = {ControlState.HOVERED: Colors.WHITE,ControlState.DEFAULT: Colors.WHITE}
         buttonbgcolors = {ControlState.HOVERED: Colors.BLUE,ControlState.DEFAULT: Colors.BLUE_900}
 
-        self.matchcv_btn =  ElevatedButton(text="Find Jobs by Uploading Resume",on_click=lambda e:self.page.go("/EmployerCV"),icon=Icons.DOCUMENT_SCANNER, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
-        self.matchjobdescription_btn =  ElevatedButton(text="Find Employers by Job Description",on_click=lambda e:self.page.go("/JobCV"),icon=Icons.SEARCH, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
+        self.matchcv_btn =  ElevatedButton(text="Find Jobs by Uploading Resume",on_click=lambda e:self.page.go("/JobsCV"),icon=Icons.DOCUMENT_SCANNER, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
+        self.matchjobdescription_btn =  ElevatedButton(text="Find Employers by Job Description",on_click=lambda e:self.page.go("/EmployersCV"),icon=Icons.SEARCH, width=self.Width / 4,height=self.Height / 8,style=ButtonStyle(icon_size=30,bgcolor=buttonbgcolors,color=buttonColors,shape=RoundedRectangleBorder(radius=border_radius.all(25))))
 
         self.buttonsRow = Row(controls=[self.matchcv_btn,self.matchjobdescription_btn],alignment=MainAxisAlignment.CENTER)
         
         #! ======================================================= Page Controls ===================================================
-        self.content = Row(controls=[
+        self.content = Row(alignment=MainAxisAlignment.CENTER,controls=[
             Column(controls=[self.badgeRow,self.headlineRow,self.subtitleRow,self.buttonsRow],expand=True,spacing=30,alignment=MainAxisAlignment.CENTER,horizontal_alignment=alignment.center),
-            Image(src=r"assets/image.png",width=500,height=500,border_radius=border_radius.all(25))
-
-
-        ],alignment=MainAxisAlignment.CENTER)
+            Image(src=r"image.png",width=500,height=500,border_radius=border_radius.all(25))
+        ])

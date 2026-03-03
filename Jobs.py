@@ -1,13 +1,13 @@
-import re
-import pandas as pd
-import pymupdf
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
 import numpy as np
+import re
+import pymupdf
 import spacy
 
 
-class Employer():
+class Jobs():
 
     @staticmethod
     def _setup_skill_extractor(knowsSkills:list[str]):
@@ -19,7 +19,7 @@ class Employer():
     
     @staticmethod
     def extract_skills(text:str,knowsSkills:list[str]) -> list[str]:
-        doc = Employer._setup_skill_extractor(knowsSkills)(text)
+        doc = Jobs._setup_skill_extractor(knowsSkills)(text)
         found_skills = set(ent.text for ent in doc.ents if ent.label_ == "SKILL")
         return list(found_skills) if len(list(found_skills)) > 1 else ["No Matched Skill"]
 
@@ -73,7 +73,7 @@ class Employer():
         return ['Contract', 'Full-Time', 'Intern', 'Part-Time', 'Temporary']
     
 
-    def Read_CV(seld,path:str):
+    def Read_CV(seld,path:str) -> str:
         cv_text = []
         doc = pymupdf.open(f"{path}") 
         for i,page in enumerate(doc): 

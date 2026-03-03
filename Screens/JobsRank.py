@@ -1,25 +1,32 @@
 from flet import * 
 import pandas as pd
 import webbrowser
-from Employer import Employer
 import re
+import winsound
+from .Widgets.CustomWidgets import *
+from Jobs import Jobs
 
-class EmployerRank(Container):
+
+class JobsRank(Container):
     def __init__(self, page: Page, Results: pd.DataFrame = None,CVText:str = None):
         super().__init__()
         self.page = page
         self.Results = Results
         self.CVText = CVText
+        self.page.padding  = 20
         self.padding = 20
         self.expand = True
         self.alignment = alignment.top_center
-        self.Width = self.page.window.width 
-        self.Height = self.page.window.height 
-        self.page.padding  = 20
 
+        #! ======================================================= Variables and objects ===================================================
+        self.Header = button_functions(self.page)
+        self.Width = self.page.window.width 
+        self.Height = self.page.window.height
+
+        #! ======================================================= Appbar ===================================================
         exit_button = IconButton(icon=Icons.ARROW_BACK_IOS_ROUNDED,icon_color=Colors.BLUE_500,on_click=lambda e:self.page.go(f"{self.page.views[-2].route}"))
         apppbar_Title = Text("Jobs & Resume Ranker", weight=FontWeight.W_500) 
-        self.appbar = AppBar(leading=exit_button, title=apppbar_Title, bgcolor=Colors.WHITE)
+        self.appbar = AppBar(leading=exit_button, title=apppbar_Title, bgcolor=Colors.WHITE,actions=self.Header.Get_Buttons(),elevation_on_scroll=0,elevation=0)
 
         #! ======================================================= Headline ===================================================
         self.headline = Text(spans=[
@@ -33,11 +40,11 @@ class EmployerRank(Container):
 
         #! ======================================================= Top Match UI ===================================================
         self.top_match_card = Container(
-            width=self.Width * 0.6, # Keeps it nicely centered and responsive
+            width=self.Width * 0.6,
             content=Column([
                 Row([
-                    Icon(Icons.STAR, color=Colors.AMBER_400, size=30),
                     Text("Top Match", size=20, weight=FontWeight.BOLD, color=Colors.WHITE),
+                    Icon(Icons.STAR, color=Colors.AMBER_400, size=30),
                 ], alignment=MainAxisAlignment.SPACE_BETWEEN),
                 
                 Text(spans=[
@@ -45,12 +52,11 @@ class EmployerRank(Container):
                 TextSpan(text=f"{top_match['Company']}",style=TextStyle(weight=FontWeight.BOLD,color=Colors.WHITE,size=24))
                 ],text_align=TextAlign.LEFT),
                 Row([
-                   IconButton(icon=Icons.LOCATION_ON,icon_color=Colors.WHITE,on_click= lambda e:webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={top_match["latitude"]},{top_match["longitude"]}")), 
+                   IconButton(tooltip=CustomTooltip(text=f"Click To show location of {top_match['Company']}",color=Colors.AMBER_400),icon=Icons.LOCATION_ON,icon_color=Colors.WHITE,on_click= lambda e:webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={top_match["latitude"]},{top_match["longitude"]}")), 
                    Text(f"{top_match['location']}, {top_match['Country']}", size=14, color=Colors.WHITE70),
                 ],spacing=2),
                 
 
-                
                 Divider(color=Colors.WHITE24),
                 
                 Row([
@@ -73,10 +79,8 @@ class EmployerRank(Container):
                             bgcolor=Colors.BLUE_100,
                             padding=padding.symmetric(horizontal=10, vertical=5),
                             border_radius=10
-                            ) for skill in Employer.extract_skills(text=self.CVText,knowsSkills=re.findall(pattern=r"\b[A-Z]+[a-z]*(?:\s+[a-z]+)*",string=top_match["skills"]))]),
-                            
-
-                
+                            ) for skill in Jobs.extract_skills(text=self.CVText,knowsSkills=re.findall(pattern=r"\b[A-Z]+[a-z]*(?:\s+[a-z]+)*",string=top_match["skills"]))]),
+                                
                 # Match Score Badge
                 Container(
                     content=Text(f"{top_match['Match_Score']:.1f}% Match", weight=FontWeight.BOLD, color=Colors.BLUE_900),
@@ -107,7 +111,7 @@ class EmployerRank(Container):
                         width=self.Width * 0.6, 
                         padding=15,
                         content=ListTile(
-                            leading=IconButton(icon=Icons.LOCATION_ON,icon_color=Colors.BLUE_GREY_800,icon_size=30 ,on_click= lambda e:webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={row["latitude"]},{row["longitude"]}")),
+                            leading=IconButton(tooltip=CustomTooltip(text=f"Click To show location of {row['Company']}",color=Colors.BLUE),icon=Icons.LOCATION_ON,icon_color=Colors.BLUE_GREY_800,icon_size=30 ,on_click= lambda e, lat=row["latitude"],long=row["longitude"]:webbrowser.open(f"https://www.google.com/maps/search/?api=1&query={lat},{long}")),
                             title= Text(spans=[
                                     TextSpan(text=f"{row['Job Title']} in ",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLACK,size=24)),
                                     TextSpan(text=f"{row['Company']}",style=TextStyle(weight=FontWeight.BOLD,color=Colors.BLUE,size=24))
@@ -121,7 +125,7 @@ class EmployerRank(Container):
                                                 bgcolor=Colors.BLUE_100,
                                                 padding=padding.symmetric(horizontal=10, vertical=5),
                                                 border_radius=10
-                                                ) for skill in Employer.extract_skills(text=self.CVText,knowsSkills=re.findall(pattern=r"\b[A-Z]+[a-z]*(?:\s+[a-z]+)*",string=row["skills"]))]),
+                                                ) for skill in Jobs.extract_skills(text=self.CVText,knowsSkills=re.findall(pattern=r"\b[A-Z]+[a-z]*(?:\s+[a-z]+)*",string=row["skills"]))]),
                                     
                             ], spacing=5),
                             trailing=Container(
@@ -139,20 +143,21 @@ class EmployerRank(Container):
         self.controls = [
             self.headline,
             self.top_match_card,
-            Container(height=10), # Spacer
+            Container(height=10), 
             Text(f"Other {len(other_matches)} Matches", size=18, weight=FontWeight.BOLD, color=Colors.BLUE_GREY_800),
             self.other_choices_list
         ]
 
-        # Your original layout wrappers
         self.main_column = Column(
             controls=[Row(controls=[control], alignment=MainAxisAlignment.CENTER) for control in self.controls],
             expand=True,
             spacing=20,
-            alignment=MainAxisAlignment.START, # Changed to START so it scrolls naturally
+            alignment=MainAxisAlignment.START, 
             horizontal_alignment=CrossAxisAlignment.CENTER,
-            scroll=ScrollMode.AUTO # Added scroll so the list doesn't get cut off
+            scroll=ScrollMode.AUTO 
         )
 
         self.content = Row(expand=True, controls=[self.main_column], alignment=MainAxisAlignment.CENTER)
+        winsound.MessageBeep()
+
 
