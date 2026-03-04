@@ -22,7 +22,7 @@ This repository contains the projects and tasks completed for **the Elevvo Pathw
 * `task_5:` [**Topic Modeling**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_5)
 * `task_6:` [**QA Transformers**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_6)
 * `task_7:` [**Text Summarization**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_7)
-* `task_8:`  **Resume Screening**
+* `task_8:`  [**Resume Screening**](https://github.com/Youssef3082004/Elevvo_Pathways_Internship/tree/Task_8)
 
 
 ### ✨ **So Stay Tuned for What's Coming!**
