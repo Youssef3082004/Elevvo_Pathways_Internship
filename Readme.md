@@ -1,4 +1,4 @@
-# 🚀 Jobs & Resume Ranker
+# Jobs & Resume Ranker
 
 <div align="center">
 
